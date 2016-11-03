@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<hmtl lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes, maximum-scale=10">
+		
+		<title>Szlaki Jakubowe w Polsce</title>
+
+        <!-- Bootswatch Yeti Theme for Layer Tree-->
+        <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet">
+		
+		<!--OpenLayers3 Styling -->
+		<link href="css/ol.css" rel="stylesheet">
+		
+		<!-- Goecoder Styling -->
+		<link href="css/ol3-geocoder.min.css" rel="stylesheet" >
+		
+		<!-- Google Fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,500,700,900" rel="stylesheet">
+
+		<!-- Project Styling -->
+		<link href="css/main.css" rel="stylesheet">
+	</head>
+	<body>
+
+		<!-- Start Header & Nav -->
+		<header id="home">
+            
+			<nav class="text-center">
+                <a class="jumper" href="#geoportal">Geoportal</a>
+                <a href="http://www.camino.net.pl/credencial/" target="_blank">Paszport Pielgrzyma</a>
+                <a href="http://www.camino.net.pl/" target="_blank">Stowarzyszenie</a>
+                <a class="jumper" href="footer">Kontakt</a>
+			</nav>
+            
+			<h1 class="page-title text-center vertical-align"><span>Szlaki Jakubowe w Polsce</span></h1>
+            
+		</header>
+        
+        <!-- Start Geoportal Section-->
+        <section id="geoportal" class="geoportal">
+            
+            <h2 class="text-center">Geoportal Szlaków Jakubowych</h2>
+            
+            <!-- Geoportal Nav -->
+            <nav class="text-center">
+  				<a class="jumper" href="header">Strona główna</a>
+                <a id="track">Zlokalizuj się</a>
+                <a id="export-png" class="btnbtn-default" download="map.png"><i class="fa fa-download"></i>Pobierz mapę PNG</a>
+  				<a class="jumper" href="footer">Kontakt</a>
+  			</nav>
+
+            <div id="geoportal-row">
+
+                <!-- Map Layer Info Board -->
+                <div id="layer-info-board">
+                    <h3>Zawartość mapy</h3>
+                    <div id="layertree" class="tree"></div>
+                </div>
+                
+                <!-- Map Functionality Info Board -->
+                <div class="map-info-board text-center">
+                    <p class="drag-drop">Dodaj własne dane wektorowe!<br>(GPX, GeoJSON, IGC, KML<br>Przeciągnij i upuść w oknie mapy</p>
+                    
+                    <div class="church-info">
+                        <p>Przybliż widok, by wyświetlić<br>dane adresowe kościoła</p>
+                        <div class="church-icon"></div>
+                    </div>
+                    
+                    <div class="hotel-info">
+                        <p>Kliknij w punkt noclegowy,<br>aby wyświetlić dane kontaktowe</p>
+                        <div class="hotel-icon"></div>
+                    </div>
+                    
+                    <div class="tracks-info">
+                        <p>Kliknij na ścieżkę Szlaku,<br>by wyświetlić informacje</p>
+                        <div class="tracks-icon"></div>
+                    </div>
+                </div>
+
+                <!-- The Map -->
+                <div id="map" class="map"></div>
+
+                <!-- Interactive Map Popup Section-->
+                <div id="popup" class="ol-popup">
+                    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                    <div id="popup-content"></div>
+                </div>                
+            </div>
+
+            <!-- Contribution -->
+            <div class="contribution text-center">
+                <a href="http://camino.net.pl" target="_blank">Dane wektorowe udostępnione dzięki uprzejmości <strong> Stowarzyszenia Przyjaciół Dróg św. Jakuba w Polsce</strong></a>
+            </div>
+
+        </section>
+        
+        <!-- Start Footer Section -->
+        <footer>
+            <h3>Kontakt</h3>
+
+            <!-- Contact Form powered by formspree.io -->
+            <form action = "https://formspree.io/szlaki.jakubowe.polska@gmail.com" method="POST"> <!--open this page through a web server -->
+                <div class="contact-info">
+                    <label><span>Imię</span>
+                    <input type="text" name="name" placeholder="Anna"></label>
+                    
+                    <label><span>E-mail</span>
+                    <input type="email" name="_replyto" placeholder="annakowalska@gmail.com" required=""></label>
+                </div>
+                <label><span>Napisz o swoim pomyśle/problemie!</span>
+                <textarea name="message" required=""></textarea></label>
+                <input type="submit" value=Wyślij>
+            </form>
+
+            <!-- Copyrights -->
+            <p class="copyright">All content copyright Katarzyna Frania 2016 </p>
+
+        </footer>
+
+		<!-- Include all compiled plugins and JS scripts -->
+		<!-- jQuery -->
+        <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>		
+        
+        <!-- OpenLayers v3.19.1 -->
+		<script src="http://openlayers.org/en/v3.19.1/build/ol.js"></script>
+
+        <!-- Geocoder -->
+		<script src="js/ol3-geocoder.js"></script>
+
+		<!-- Map content and interaction script -->
+		<script src="js/map.js"></script>
+        
+	</body>
+
+</html>
