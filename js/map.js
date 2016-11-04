@@ -10,21 +10,82 @@ $(document).ready(function () {
         700);
 	});
     
+// Drag'n'Drop Default Style
+	var defaultStyle = {
+        'Point': new ol.style.Style({
+          image: new ol.style.Circle({
+            fill: new ol.style.Fill({
+              color: 'rgba(255,255,0,0.5)'
+            }),
+            radius: 5,
+            stroke: new ol.style.Stroke({
+              color: '#ff0',
+              width: 1
+            })
+          })
+        }),
+        'LineString': new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: '#f00',
+            width: 3
+          })
+        }),
+        'Polygon': new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: 'rgba(0,255,255,0.5)'
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#0ff',
+            width: 1
+          })
+        }),
+        'MultiPoint': new ol.style.Style({
+          image: new ol.style.Circle({
+            fill: new ol.style.Fill({
+              color: 'rgba(255,0,255,0.5)'
+            }),
+            radius: 5,
+            stroke: new ol.style.Stroke({
+              color: '#f0f',
+              width: 1
+            })
+          })
+        }),
+        'MultiLineString': new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: '#0f0',
+            width: 3
+          })
+        }),
+        'MultiPolygon': new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: 'rgba(0,0,255,0.5)'
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#00f',
+            width: 1
+          })
+        })
+      };
 
-// Permalink
-    if (window.location.hash !== '') {
-        // try to restore center, zoom-level and rotation from the URL
-        var hash = window.location.hash.replace('#map=', '');
-        var parts = hash.split('/');
-        if (parts.length === 4) {
-          	zoom = parseInt(parts[0], 10);
-        	center = [
-            	parseFloat(parts[1]),
-            	parseFloat(parts[2])
-          	];
-          	rotation = parseFloat(parts[3]);
+      var styleFunction = function(feature, resolution) {
+        var featureStyleFunction = feature.getStyleFunction();
+        if (featureStyleFunction) {
+          return featureStyleFunction.call(feature, resolution);
+        } else {
+          return defaultStyle[feature.getGeometry().getType()];
         }
-      }
+      };
+
+      var dragAndDropInteraction = new ol.interaction.DragAndDrop({
+        formatConstructors: [
+          ol.format.GPX,
+          ol.format.GeoJSON,
+          ol.format.IGC,
+          ol.format.KML,
+          ol.format.TopoJSON
+        ]
+      });
 
 /*----------------------------------------------------------
 GEOSPATIAL DATA FOR JACOBEAN WAY IN POLAND
@@ -167,8 +228,7 @@ GEOSPATIAL DATA FOR JACOBEAN WAY IN POLAND
 	});
 
 
-// Adding geospatial vector data to The Map
-    
+// Adding geospatial vector data to The Map  
 // Tracks
 	var tracks = new ol.layer.Group({
 		name: 'SZLAKI',
@@ -479,7 +539,6 @@ GEOSPATIAL DATA FOR JACOBEAN WAY IN POLAND
     				anchorYUnits: 'pixels',
     				opacity: 0.6,
     				src: 'img/chapelblue.png', 
-    				// Icon made by Scott de Jonge from www.flaticon.com //!!!!
     				scale: 0.27
 				}),
 				text: createTextStyle(feature, resolution)
@@ -498,88 +557,22 @@ GEOSPATIAL DATA FOR JACOBEAN WAY IN POLAND
 		style: createPointStyleFeature()
 	});
 
-
-/*----------------------------------------------------------
-Drag'n'Drop Default Style
-----------------------------------------------------------*/
-// Add your own geospatial data in supported formats
-	var defaultStyle = {
-        'Point': new ol.style.Style({
-          image: new ol.style.Circle({
-            fill: new ol.style.Fill({
-              color: 'rgba(255,255,0,0.5)'
-            }),
-            radius: 5,
-            stroke: new ol.style.Stroke({
-              color: '#ff0',
-              width: 1
-            })
-          })
-        }),
-        'LineString': new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: '#f00',
-            width: 3
-          })
-        }),
-        'Polygon': new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: 'rgba(0,255,255,0.5)'
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#0ff',
-            width: 1
-          })
-        }),
-        'MultiPoint': new ol.style.Style({
-          image: new ol.style.Circle({
-            fill: new ol.style.Fill({
-              color: 'rgba(255,0,255,0.5)'
-            }),
-            radius: 5,
-            stroke: new ol.style.Stroke({
-              color: '#f0f',
-              width: 1
-            })
-          })
-        }),
-        'MultiLineString': new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: '#0f0',
-            width: 3
-          })
-        }),
-        'MultiPolygon': new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: 'rgba(0,0,255,0.5)'
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#00f',
-            width: 1
-          })
-        })
-      };
-
-      var styleFunction = function(feature, resolution) {
-        var featureStyleFunction = feature.getStyleFunction();
-        if (featureStyleFunction) {
-          return featureStyleFunction.call(feature, resolution);
-        } else {
-          return defaultStyle[feature.getGeometry().getType()];
+// Permalink
+    if (window.location.hash !== '') {
+        // try to restore center, zoom-level and rotation from the URL
+        var hash = window.location.hash.replace('#map=', '');
+        var parts = hash.split('/');
+        if (parts.length === 4) {
+          	zoom = parseInt(parts[0], 10);
+        	center = [
+            	parseFloat(parts[1]),
+            	parseFloat(parts[2])
+          	];
+          	rotation = parseFloat(parts[3]);
         }
-      };
+      }
 
-      var dragAndDropInteraction = new ol.interaction.DragAndDrop({
-        formatConstructors: [
-          ol.format.GPX,
-          ol.format.GeoJSON,
-          ol.format.IGC,
-          ol.format.KML,
-          ol.format.TopoJSON
-        ]
-      });    
     
-
 /*----------------------------------------------------------
 The Map Declaration and Functionality
 ----------------------------------------------------------*/
@@ -588,9 +581,8 @@ The Map Declaration and Functionality
        	center: ol.proj.fromLonLat([19.41, 52]),
       	zoom: 6
     });
-
     
-// Adding loaded geospatial data to the Map
+// Adding base maps to the Map
     var base = new ol.layer.Group({
     	name: 'MAPY BAZOWE',
     	layers: [ 
@@ -633,8 +625,7 @@ The Map Declaration and Functionality
        			visible: true
     		})    		
     	]
-    });  		
-    
+    });  		   
     
 // Creating container for the Geospatial Layers' Popup
     var container = document.getElementById('popup');
@@ -655,7 +646,6 @@ The Map Declaration and Functionality
         closer.blur();
         return false;
     };
-
     
 // Creating of the Map
 	var map = new ol.Map({
@@ -677,85 +667,8 @@ The Map Declaration and Functionality
 			})
 		]),
 		interactions: ol.interaction.defaults().extend([dragAndDropInteraction])
-   	});
+   	});  
     
-    
- // Geocoding tool contributing to github.com/jonataswalker/ol3-geocoder
-	var geocoder = new Geocoder('nominatim', {
-  		provider: 'osm',
-  		key: '__some_key__',
-  		lang: 'pl', //en-US, fr-FR
-  		placeholder: 'Szukaj adresu ...',
-  		limit: 5,
-  		keepOpen: true,
-  		countrycodes : 'pl'
-	});
-	
-	map.addControl(geocoder);
-
-	geocoder.on('addresschosen', function(evt){
-  		var feature = evt.feature,
-      		coord = evt.coordinate,
-      		address = evt.address;
-
-  		content.innerHTML = '<p>'+ address.formatted +'</p>';
-  		overlay.setPosition(coord);
-	});
-    
-    
-// Export Map to PDF
-	var exportPNGElement = document.getElementById('export-png');
-    
-      if ('download' in exportPNGElement) {
-        exportPNGElement.addEventListener('click', function() {
-          map.once('postcompose', function(event) {
-            var canvas = event.context.canvas;
-            exportPNGElement.href = canvas.toDataURL('image/png');
-          });
-          map.renderSync();
-        }, false);
-      } else {
-        var info = document.getElementById('no-download');
-        /**
-         * display error message
-         */
-        info.style.display = '';
-      }
- 
-    
-// Drag'n'drop 
-	dragAndDropInteraction.on('addfeatures', function(event) {
-        var vectorSource = new ol.source.Vector({
-          features: event.features
-        });
-        map.addLayer(new ol.layer.Vector({
-          source: vectorSource,
-          style: styleFunction
-        }));
-        map.getView().fit(
-            vectorSource.getExtent(), /** @type {ol.Size} */ (map.getSize()));
-      });
-
-      var displayFeatureInfo = function(pixel) {
-        var features = [];
-        map.forEachFeatureAtPixel(pixel, function(feature) {
-          features.push(feature);
-        });
-      };
-
-      map.on('pointermove', function(evt) {
-        if (evt.dragging) {
-          return;
-        }
-        var pixel = map.getEventPixel(evt.originalEvent);
-        displayFeatureInfo(pixel);
-      });
-
-      map.on('click', function(evt) {
-        displayFeatureInfo(evt.pixel);
-      });    
-
-
 // Information Popup for Vector Layers
 	map.on('singleclick', function(evt) {
 		overlay.setPosition(evt.coordinate);
@@ -787,12 +700,176 @@ The Map Declaration and Functionality
         	var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(coordinate, 'EPSG:3857', 'EPSG:4326'));
         	content.innerHTML = '<p>Kliknąłeś tutaj!:</p><code>' + hdms +'</code>';
 		}
-	});    
-    
+	});  
     
 // Layer Tree Switcher - get layer groups
 	map.getLayerGroup().set('name', 'Warstwy');
+  
+// Export Map to PDF
+	var exportPNGElement = document.getElementById('export-png');
+    
+      if ('download' in exportPNGElement) {
+        exportPNGElement.addEventListener('click', function() {
+          map.once('postcompose', function(event) {
+            var canvas = event.context.canvas;
+            exportPNGElement.href = canvas.toDataURL('image/png');
+          });
+          map.renderSync();
+        }, false);
+      } else {
+        var info = document.getElementById('no-download');
+        /**
+         * display error message
+         */
+        info.style.display = '';
+      }
+    
+// Drag'n'drop functionality
+	dragAndDropInteraction.on('addfeatures', function(event) {
+        var vectorSource = new ol.source.Vector({
+          features: event.features
+        });
+        map.addLayer(new ol.layer.Vector({
+          source: vectorSource,
+          style: styleFunction
+        }));
+        map.getView().fit(
+            vectorSource.getExtent(), /** @type {ol.Size} */ (map.getSize()));
+      });
 
+      var displayFeatureInfo = function(pixel) {
+        var features = [];
+        map.forEachFeatureAtPixel(pixel, function(feature) {
+          features.push(feature);
+        });
+      };
+
+      map.on('pointermove', function(evt) {
+        if (evt.dragging) {
+          return;
+        }
+        var pixel = map.getEventPixel(evt.originalEvent);
+        displayFeatureInfo(pixel);
+      });
+
+      map.on('click', function(evt) {
+        displayFeatureInfo(evt.pixel);
+      });
+    
+ // Geocoding tool contributing to github.com/jonataswalker/ol3-geocoder
+	var geocoder = new Geocoder('nominatim', {
+  		provider: 'osm',
+  		key: '__some_key__',
+  		lang: 'pl', //en-US, fr-FR
+  		placeholder: 'Szukaj adresu ...',
+  		limit: 5,
+  		keepOpen: true,
+  		countrycodes : 'pl'
+	});
+	
+	map.addControl(geocoder);
+
+	geocoder.on('addresschosen', function(evt){
+  		var feature = evt.feature,
+      		coord = evt.coordinate,
+      		address = evt.address;
+
+  		content.innerHTML = '<p>'+ address.formatted +'</p>';
+  		overlay.setPosition(coord);
+	});
+    
+// Geolocation
+	var geolocation = new ol.Geolocation({
+    	projection: view.getProjection()
+    });
+
+    function el(id) {
+    	return document.getElementById(id);
+    };
+
+    el('track').addEventListener('click', function() {
+    	geolocation.setTracking(this.click);
+    });
+    
+// Handle geolocation error
+    geolocation.on('error', function(error) {
+    	var info = document.getElementById('info');
+    	info.innerHTML = error.message;
+    	info.style.display = '';
+    });
+
+    var accuracyFeature = new ol.Feature();
+    	geolocation.on('change:accuracyGeometry', function() {
+    	accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+    });
+
+    var positionFeature = new ol.Feature();
+    positionFeature.setStyle(new ol.style.Style({
+    	image: new ol.style.Circle({
+    		radius: 10,
+    		fill: new ol.style.Fill({
+    			color: '#f00'
+    	}),
+         	stroke: new ol.style.Stroke({
+        		color: '#fff',
+        		width: 2
+        	})
+        })
+    }));
+
+    geolocation.on('change:position', function() {
+    	var coordinates = geolocation.getPosition();
+    	positionFeature.setGeometry(coordinates ?
+    		new ol.geom.Point(coordinates) : null);
+        map.getView().setZoom(12);
+        map.getView().setCenter(coordinates);
+    });
+
+    new ol.layer.Vector({
+    	map: map,
+    	source: new ol.source.Vector({
+    		features: [accuracyFeature, positionFeature]
+    	})
+    });
+    
+    
+    
+// Permalink
+	var shouldUpdate = true;
+    var view = map.getView();
+    var updatePermalink = function() {
+    	if (!shouldUpdate) {
+          // do not update the URL when the view was changed in the 'popstate' handler
+        	shouldUpdate = true;
+        	return;
+        }
+
+        var center = view.getCenter();
+        var hash = '#map=' +
+            view.getZoom() + '/' +
+            Math.round(center[0] * 100) / 100 + '/' +
+            Math.round(center[1] * 100) / 100 + '/' +
+            view.getRotation();
+        var state = {
+          zoom: view.getZoom(),
+          center: view.getCenter(),
+          rotation: view.getRotation()
+        };
+        window.history.pushState(state, 'map', hash);
+    };
+
+    map.on('moveend', updatePermalink);
+
+    window.addEventListener('popstate', function(event) {
+        if (event.state === null) {
+        	return;
+        }
+        map.getView().setCenter(event.state.center);
+        map.getView().setZoom(event.state.zoom);
+        map.getView().setRotation(event.state.rotation);
+        shouldUpdate = false;
+    });
+    
 // Layer Tree - Switcher
     function buildLayerTree(layer) {
         var elem;
@@ -860,7 +937,6 @@ The Map Declaration and Functionality
     }
 
     initializeTree();
-    
 
 // Handle visibility control
     $('i').on('click', function() {
@@ -879,44 +955,5 @@ The Map Declaration and Functionality
 	$('#js-layertree').empty().append(elem);
 
 	var div = "<li data-layerid='" + name + "'>" + 	"<span><i class='glyphicon glyphicon-file'></i> " + layer.get('name') + "</span>" + "<i class='glyphicon glyphicon-check'></i> " + 	"<input style='width:80px;' class='opacity' type='text' value='' data-slider-min='0' data-slider-max='1' data-slider-step='0.1' data-slider-tooltip='hide'>";    
-        
     
-    //Permalink
-	var shouldUpdate = true;
-    var view = map.getView();
-    var updatePermalink = function() {
-    	if (!shouldUpdate) {
-          // do not update the URL when the view was changed in the 'popstate' handler
-        	shouldUpdate = true;
-        	return;
-        }
-
-        var center = view.getCenter();
-        var hash = '#map=' +
-            view.getZoom() + '/' +
-            Math.round(center[0] * 100) / 100 + '/' +
-            Math.round(center[1] * 100) / 100 + '/' +
-            view.getRotation();
-        var state = {
-          zoom: view.getZoom(),
-          center: view.getCenter(),
-          rotation: view.getRotation()
-        };
-        window.history.pushState(state, 'map', hash);
-    };
-
-    map.on('moveend', updatePermalink);
-
-      // restore the view state when navigating through the history, see
-      // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
-    window.addEventListener('popstate', function(event) {
-        if (event.state === null) {
-        	return;
-        }
-        map.getView().setCenter(event.state.center);
-        map.getView().setZoom(event.state.zoom);
-        map.getView().setRotation(event.state.rotation);
-        shouldUpdate = false;
-    });
-
 });
