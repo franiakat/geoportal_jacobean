@@ -1,4 +1,7 @@
-/*------------- Geoportal Functionality by Katarzyna Frania github.com/franiakat -------------*/
+/*------------- Geoportal Functionality by Katarzyna Frania http://github.com/franiakat -------------*/
+// Functionality contribution - OpenLayers3 Examples http://openlayers.org/en/latest/examples
+// Geocoding tool contributing to http://github.com/jonataswalker/ol3-geocoder
+// Layer Tree Functionality contributing to http://jmfitton.com/openlayers-3-layer-tree
 
 // Page Animation 
 $(document).ready(function () {
@@ -511,7 +514,7 @@ GEOSPATIAL DATA FOR JACOBEAN WAY IN POLAND
     	}  
     	else if (resolution < maxResolutionT){
     		if (resolution < maxResolutionS){
-    			text=text+'\n'+snippet;
+    			text = text + '\n' + snippet;
     		}
     		return text;
     	}
@@ -680,19 +683,19 @@ The Map Declaration and Functionality
 
 		if (feature) {
 			if (feature.get('Telefon')==undefined && feature.get('Snippet')==undefined ) {
-					content.innerHTML = '<p>Nazwa:</p>'+'</p>'+'<b>'+feature.get('Name')+'</b>'+'<br>';
+					content.innerHTML = '<p>Nazwa:</p>' + '</p>' + '<b>' + feature.get('Name') + '</b>' + '<br>';
 			}
 			else if(feature.get('Telefon')==undefined ){
-				content.innerHTML = '<p>Nazwa:</p>'+'</p>'+
-				'<b>'+feature.get('Name')+'</b>'+'<br>'+
-				'<p>Inne informacje: </p>'+
-				'<b>'+feature.get('Snippet')+'</b>';
+				content.innerHTML = '<p>Nazwa:</p>' + '</p>' +
+				'<b>'+feature.get('Name') + '</b>' + '<br>' +
+				'<p>Inne informacje: </p>' +
+				'<b>'+feature.get('Snippet') +'</b>';
 			}
 			else {
-				content.innerHTML = '<p>Nazwa:</p>'+'</p>'+
-				'<b>'+feature.get('Name')+'</b>'+'<br>'+
-				'<p>Inne informacje: </p>'+
-				'<b>'+feature.get('Snippet')+'</b>'+'<br>'+'<b>'+feature.get('Telefon')+'</b>';
+				content.innerHTML = '<p>Nazwa:</p>' + '</p>' +
+				'<b>'+feature.get('Name') +'</b>' +'<br>' +
+				'<p>Inne informacje: </p>' +
+				'<b>'+ feature.get('Snippet') + '</b>' + '<br>' + '<b>' + feature.get('Telefon') + '</b>';
 			}
 		}
 		else {
